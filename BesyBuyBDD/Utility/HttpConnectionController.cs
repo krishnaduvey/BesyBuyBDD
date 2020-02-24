@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,16 +11,60 @@ namespace BesyBuyBDD.Utility
 {
     public class HttpConnectionController
     {
-        public HttpClient _client;
+        public HttpClient _client=null;
+        public static string _baseAddress = "http://localhost:3030";
+
+
+        public HttpConnectionController() {
+            this._client.BaseAddress = new Uri(_baseAddress);
+            this._client.DefaultRequestHeaders.Accept.Clear();
+            this._client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        public static void GetContent(Task<HttpResponseMessage> response) {
+            HttpResponseMessage message = response.Result;      
+            Task<string> data=message.Content.ReadAsStringAsync();
+            data.Wait();
+            var result=data.Result;
+            JsonParserUtility.JSONDataHandler(result);
+        }
+
+        public static  HttpStatusCode GetReponseStatusCode(Task<HttpResponseMessage> response)
+        {
+
+            HttpResponseMessage message = response.Result;
+            //Task<string> data = message.
+            //data.Wait();
+            if (message.IsSuccessStatusCode)
+                {
+               
+                Console.WriteLine(message.StatusCode.ToString());
+                return message.StatusCode;
+                }
+                else
+                {
+                    // problems handling here
+                    Console.WriteLine(
+                        "Error occurred, the status code is: {0}",
+                        message.StatusCode
+                    );
+
+                
+                }
+
+            return message.StatusCode;
+        }
+
+
+
+
 
         public void GetResourceName() {
 
+         
         }
 
-        public HttpConnectionController() {
-            this._client = GetClientConnection();
-
-        }
         public string Get(string uri) {
            var responseTask = _client.GetAsync(uri);
             responseTask.Wait();
@@ -74,13 +120,14 @@ namespace BesyBuyBDD.Utility
         }
 
 
-        public  static HttpClient GetClientConnection() {
+        public  static void GetClientConnection() {
 
-            using (HttpClient client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:3030");
-                return client;
-            }
+       
+           
+
+
+
+
         }
     }
 }

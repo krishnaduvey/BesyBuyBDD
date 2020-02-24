@@ -17,30 +17,8 @@ namespace BesyBuyBDD
     {
         static void Main(string[] args)
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri("http://localhost:3030");
-                //HTTP GET
-                var responseTask = client.GetAsync("Products");
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-
-                    var readTask = result.Content.ReadAsStringAsync();
-                        readTask.Wait();
-
-                    var students = readTask.Result;
-
-                    foreach (var student in students)
-                    {
-                        Console.WriteLine(student);
-                    }
-                    
-                }
-            }
-            Console.ReadLine();
+            
+              
 
         }
     }

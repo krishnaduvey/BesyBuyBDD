@@ -20,12 +20,14 @@ namespace BesyBuyBDD.PageObjects
         HttpClient _client=null;
 
         Products() {
-           
+            
         }
 
-        public void FindProduct() {
-            _client = GetClientConnection();
-            _client.GetAsync("/Products");
+        public void FindProduct(string resourceName) {
+            var controller = new HttpConnectionController();
+            _client = controller._client;
+            var resouceData = _client.GetAsync(resourceName);
+           
         }
 
         public static void CreateProduct()
@@ -43,5 +45,11 @@ namespace BesyBuyBDD.PageObjects
 
         }
 
+
+        
+
     }
 }
+
+
+// Ploymorphism { Static (Method, Operator Overloading ) and Dynamic ( virtual overriding and method overring) }
